@@ -1,9 +1,13 @@
-import React from 'react';
+import React from "react";
+import { useTranslation } from "react-i18next";
 
-const Dashboard = () => (
-  <div>
-    <h2>Dashboard</h2>
-  </div>
-);
+const Dashboard = () => {
+  const { t, i18n } = useTranslation();
+  return (
+    <div>
+      <h2>{t("dashboard")}</h2>
+    </div>
+  );
+};
 
 export default Dashboard;
