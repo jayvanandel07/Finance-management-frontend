@@ -1,15 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { decodeJWT } from "../utils/jwtDecoder";
+
+const apiUrl = import.meta.env.VITE_API_URL;
 
 // Async thunk for login
 export const login = createAsyncThunk(
   "auth/login",
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ user_id, password }, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/api/v1/auth/login", {
-        email,
+      const response = await axios.post(`${apiUrl}/auth/login`, {
+        user_id,
         password,
       });
+
       const { token } = response.data;
       // Save token to localStorage
       localStorage.setItem("token", token);
@@ -43,6 +47,10 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     token: localStorage.getItem("token") || null,
+    userType:
+      (localStorage.getItem("token") &&
+        decodeJWT(localStorage.getItem("token")).userType) ||
+      null,
     loading: false,
     error: null,
   },
@@ -61,6 +69,7 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.token = action.payload;
+        state.userType = decodeJWT(action.payload).userType;
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -73,6 +82,7 @@ const authSlice = createSlice({
       .addCase(register.fulfilled, (state, action) => {
         state.loading = false;
         state.token = action.payload;
+        state.userType = decodeJWT(action.payload).userType;
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
