@@ -5,7 +5,7 @@ import { TextField, Button, Typography, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.auth);
@@ -13,7 +13,7 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(login({ email, password }))
+    dispatch(login({ user_id:userId, password }))
       .unwrap()
       .then(() => {
         navigate('/app');
@@ -31,13 +31,13 @@ const Login = () => {
           margin="normal"
           required
           fullWidth
-          id="email"
-          label="Email Address"
-          name="email"
-          autoComplete="email"
+          id="userId"
+          label="User ID"
+          name="User ID"
+          autoComplete="user ID"
           autoFocus
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={userId}
+          onChange={(e) => setUserId(e.target.value)}
         />
         <TextField
           margin="normal"
@@ -55,7 +55,7 @@ const Login = () => {
           Sign In
         </Button>
         {loading && <p>Loading...</p>}
-        {error && <p>{error.message}</p>}
+        {error && <p>{error.error}</p>}
       </Box>
     </Box>
   );

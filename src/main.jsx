@@ -6,8 +6,6 @@ import { Provider } from "react-redux";
 import store from "./redux/store.js";
 import App from "./App.jsx";
 
-
-
 // Create a theme instance.
 const theme = createTheme({
   palette: {
