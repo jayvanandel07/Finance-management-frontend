@@ -57,24 +57,24 @@ const Menu = () => {
           <ListItemButton
             component={Link}
             to="/app/loans"
-            selected={selectedMenu === 1}
-            onClick={(event) => handleListItemClick(1)}
+            selected={selectedMenu === 2}
+            onClick={(event) => handleListItemClick(2)}
           >
             <ListItemText primary={t("loans")} />
           </ListItemButton>
           <ListItemButton
             component={Link}
             to="/app/profile"
-            selected={selectedMenu === 1}
-            onClick={(event) => handleListItemClick(1)}
+            selected={selectedMenu === 3}
+            onClick={(event) => handleListItemClick(3)}
           >
             <ListItemText primary={t("profile")} />
           </ListItemButton>
           <ListItemButton
             component={Link}
             to="/app/settings"
-            selected={selectedMenu === 2}
-            onClick={(event) => handleListItemClick(2)}
+            selected={selectedMenu === 4}
+            onClick={(event) => handleListItemClick(4)}
           >
             <ListItemText primary={t("settings")} />
           </ListItemButton>
