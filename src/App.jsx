@@ -14,6 +14,7 @@ import Settings from "./pages/Settings";
 import PrivateRoute from "./components/PrivateRoute";
 import Menu from "./components/Menu";
 import Customers from "./pages/Customers";
+import GlobalSnackbar from "./components/common/GlobalSnackbar";
 
 const App = () => {
   useEffect(() => {
@@ -60,6 +61,7 @@ const MainApp = () => (
         <Route path="*" element={<Navigate to="dashboard" />} />
       </Routes>
     </div>
+    <GlobalSnackbar />
   </div>
 );
 

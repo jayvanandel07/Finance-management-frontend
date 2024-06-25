@@ -21,10 +21,12 @@ import {
   Typography,
   Paper,
 } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "../redux/snackbarSlice";
 
 const Customers = () => {
   const { t, i18n } = useTranslation();
-
+  const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState("");
   const [customers, setCustomers] = useState([]);
   const [open, setOpen] = useState(false);
@@ -78,12 +80,18 @@ const Customers = () => {
         user_id: "",
         name: "",
         tamil_name: "",
+        alias: "",
+        email: "",
         phone: "",
         address: "",
+        cibil: "",
       });
       handleClose();
     } catch (error) {
       console.error("Error adding customer:", error);
+      dispatch(
+        showSnackbar({ message: "Something went wrong!", severity: "error" })
+      );
       // Handle error scenarios
     }
   };

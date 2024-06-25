@@ -90,20 +90,12 @@ const Menu = () => {
         padding={1}
       >
         <Box flexBasis={"50%"}>
-          <Button
-            fullWidth={Box}
-            variant="outlined"
-            onClick={() => changeLanguage("en")}
-          >
+          <Button variant="outlined" onClick={() => changeLanguage("en")}>
             English
           </Button>
         </Box>
         <Box flexBasis={"50%"}>
-          <Button
-            fullWidth={Box}
-            variant="outlined"
-            onClick={() => changeLanguage("ta")}
-          >
+          <Button variant="outlined" onClick={() => changeLanguage("ta")}>
             Tamil
           </Button>
         </Box>
