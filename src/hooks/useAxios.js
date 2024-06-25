@@ -1,9 +1,7 @@
-// src/hooks/useAxios.js
-
 import { useState, useEffect } from "react";
 import axiosInstance from "../api/axiosInstance";
 
-const useAxios = (url, options = {}) => {
+const useAxios = (url, options = {}, body = null) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -12,7 +10,15 @@ const useAxios = (url, options = {}) => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axiosInstance(url, options);
+        let response;
+        if (body) {
+          response = await axiosInstance(url, {
+            ...options,
+            data: body,
+          });
+        } else {
+          response = await axiosInstance(url, options);
+        }
         setData(response.data);
       } catch (err) {
         setError(err);
@@ -22,7 +28,7 @@ const useAxios = (url, options = {}) => {
     };
 
     fetchData();
-  }, [url, options]);
+  }, [url, options, body]);
 
   return { data, loading, error };
 };

@@ -8,13 +8,13 @@ import {
   Typography,
   Button,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const Menu = () => {
   const { t, i18n } = useTranslation();
-
-  const [selectedMenu, setSelectedMenu] = useState(0);
+  const location = useLocation();
+  const [selectedMenu, setSelectedMenu] = useState(location.pathname);
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
@@ -41,40 +41,40 @@ const Menu = () => {
           <ListItemButton
             component={Link}
             to="/app/dashboard"
-            selected={selectedMenu === 0}
-            onClick={(event) => handleListItemClick(0)}
+            selected={selectedMenu.includes("dashboard")}
+            onClick={(event) => handleListItemClick("dashboard")}
           >
             <ListItemText primary={t("dashboard")} />
           </ListItemButton>
           <ListItemButton
             component={Link}
             to="/app/customers"
-            selected={selectedMenu === 1}
-            onClick={(event) => handleListItemClick(1)}
+            selected={selectedMenu.includes("customers")}
+            onClick={(event) => handleListItemClick("customers")}
           >
             <ListItemText primary={t("customers")} />
           </ListItemButton>
           <ListItemButton
             component={Link}
             to="/app/loans"
-            selected={selectedMenu === 2}
-            onClick={(event) => handleListItemClick(2)}
+            selected={selectedMenu.includes("loans")}
+            onClick={(event) => handleListItemClick("loans")}
           >
             <ListItemText primary={t("loans")} />
           </ListItemButton>
           <ListItemButton
             component={Link}
             to="/app/profile"
-            selected={selectedMenu === 3}
-            onClick={(event) => handleListItemClick(3)}
+            selected={selectedMenu.includes("profile")}
+            onClick={(event) => handleListItemClick("profile")}
           >
             <ListItemText primary={t("profile")} />
           </ListItemButton>
           <ListItemButton
             component={Link}
             to="/app/settings"
-            selected={selectedMenu === 4}
-            onClick={(event) => handleListItemClick(4)}
+            selected={selectedMenu.includes("settings")}
+            onClick={(event) => handleListItemClick("settings")}
           >
             <ListItemText primary={t("settings")} />
           </ListItemButton>
@@ -87,9 +87,26 @@ const Menu = () => {
         paddingInline={1}
         gap={1}
         width={"100%"}
+        padding={1}
       >
-        <Button onClick={() => changeLanguage("en")}>English</Button>
-        <Button onClick={() => changeLanguage("ta")}>Tamil</Button>
+        <Box flexBasis={"50%"}>
+          <Button
+            fullWidth={Box}
+            variant="outlined"
+            onClick={() => changeLanguage("en")}
+          >
+            English
+          </Button>
+        </Box>
+        <Box flexBasis={"50%"}>
+          <Button
+            fullWidth={Box}
+            variant="outlined"
+            onClick={() => changeLanguage("ta")}
+          >
+            Tamil
+          </Button>
+        </Box>
       </Box>
     </Drawer>
   );

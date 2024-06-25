@@ -1,8 +1,19 @@
-
 {
-    "dashboard": "Dashboard",
-    "customers": "Customers",
-    "loans":"Loans",
-    "profile":"Profile",
-    "settings":"Settings"
-  }
+  "dashboard": "Dashboard",
+  "customers": "Customers",
+  "loans": "Loans",
+  "profile": "Profile",
+  "settings": "Settings",
+  "create new": "Create New",
+  "user id": "User ID",
+  "name": "Name",
+  "tamil name": "Tamil Name",
+  "alias": "Alias",
+  "email": "Email",
+  "phone": "Phone",
+  "address": "Address",
+  "cibil": "CIBIL",
+  "create new customer": "Create New Customer",
+  "cancel": "ரத்து செய்",
+  "add": "சேர்க்க"
+}

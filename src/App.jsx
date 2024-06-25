@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
   Routes,
   Navigate,
 } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
@@ -15,6 +16,19 @@ import Menu from "./components/Menu";
 import Customers from "./pages/Customers";
 
 const App = () => {
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const currentTime = Date.now() / 1000;
+
+      if (decodedToken.exp < currentTime) {
+        // Token has expired
+        localStorage.removeItem("token");
+        window.location.href = "/login"; // Redirect to login page
+      }
+    }
+  }, []);
   return (
     <Router>
       <Routes>
