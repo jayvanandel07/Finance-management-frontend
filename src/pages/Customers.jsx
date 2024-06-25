@@ -9,16 +9,19 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { customersColumn } from "../helperData/dataGrid";
 import FormDialogue from "../components/common/FormDialogue";
 import { customersModel } from "../helperData/modelData";
+import axiosInstance from "../api/axiosInstance";
 
 const Customers = () => {
   const { t, i18n } = useTranslation();
 
   const [formState, setFormSate] = useState(false);
+  const [updateFormState, setUpdateFormSate] = useState(false);
+  const [updateData, setUpdateData] = useState(null);
   const [customers, setCustomers] = useState([]);
 
   const options = useMemo(() => ({}), []);
-  const { data, loading, error } = useAxios(
-    "/users/role/Borrower,Lender",
+  const { data, loading, error, refetch } = useAxios(
+    "/users/role/Borrower",
     options
   );
 
@@ -28,6 +31,34 @@ const Customers = () => {
     }
   }, [data]);
 
+  const handleClickOpen = () => {
+    setFormSate(true);
+  };
+  const handleFormSubmit = async (formData, update) => {
+    try {
+      let response;
+      if (update) {
+        response = await axiosInstance.put(
+          `/users/${updateData.user_id}`,
+          formData
+        );
+      } else {
+        response = await axiosInstance.post("/users", formData);
+      }
+      await refetch();
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const handleEdit = (data) => {
+    setUpdateData(
+      Object.fromEntries(
+        Object.entries(data).filter(([key, value]) => value !== null)
+      )
+    );
+    setUpdateFormSate(true);
+  };
   const columns = useMemo(() => {
     return [
       ...customersColumn.map((item) => {
@@ -46,7 +77,7 @@ const Customers = () => {
               variant="contained"
               color="primary"
               startIcon={<EditIcon />}
-              onClick={() => handleEdit(params.row.id)}
+              onClick={() => handleEdit(params.row)}
               style={{ marginRight: 8 }}
             >
               Edit
@@ -64,11 +95,6 @@ const Customers = () => {
       },
     ];
   }, [t]);
-
-  const handleClickOpen = () => {
-    setFormSate(true);
-  };
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
@@ -114,10 +140,22 @@ const Customers = () => {
         formTitle={t("create_new_customer")}
         update={false}
         updateData={null}
-        apiURL={"/users"}
         additionalData={{
           user_type_id: import.meta.env.VITE_BORROWER_ROLE,
         }}
+        onSubmit={handleFormSubmit}
+      />
+      <FormDialogue
+        formState={updateFormState}
+        setFormState={setUpdateFormSate}
+        dataModel={customersModel}
+        formTitle={t("update_customer")}
+        update={true}
+        updateData={updateData}
+        additionalData={{
+          user_type_id: import.meta.env.VITE_BORROWER_ROLE,
+        }}
+        onSubmit={handleFormSubmit}
       />
     </Container>
   );

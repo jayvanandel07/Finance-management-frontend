@@ -5,9 +5,10 @@ const useAxios = (url, options = {}, body = null) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [fetchData, setFetchData] = useState(() => {});
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchDataInternal = async () => {
       try {
         setLoading(true);
         let response;
@@ -27,10 +28,15 @@ const useAxios = (url, options = {}, body = null) => {
       }
     };
 
-    fetchData();
+    setFetchData(() => fetchDataInternal);
+    fetchDataInternal();
   }, [url, options, body]);
 
-  return { data, loading, error };
+  const refetch = () => {
+    fetchData();
+  };
+
+  return { data, loading, error, refetch };
 };
 
 export default useAxios;

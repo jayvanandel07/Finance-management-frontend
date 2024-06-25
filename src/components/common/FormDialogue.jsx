@@ -12,9 +12,7 @@ import {
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackbarSlice";
-import axiosInstance from "../../api/axiosInstance";
 import { useFormik } from "formik";
-import * as yup from "yup";
 import PropTypes from "prop-types";
 import { generateValidationSchema } from "../../utils/validationSchema";
 
@@ -24,9 +22,9 @@ const FormDialogue = ({
   dataModel,
   formTitle,
   update = false,
-  updateData = {},
-  apiURL,
+  updateData = null,
   additionalData = {},
+  onSubmit,
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -34,19 +32,20 @@ const FormDialogue = ({
   // Create validation schema based on the dataModel
   const validationSchema = generateValidationSchema(dataModel, t);
   const formik = useFormik({
-    initialValues: update
-      ? updateData
-      : Object.keys(dataModel).reduce((acc, key) => {
-          acc[key] = "";
-          return acc;
-        }, {}),
+    initialValues: Object.keys(dataModel).reduce((acc, key) => {
+      acc[key] = "";
+      return acc;
+    }, {}),
     validationSchema: validationSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
-        await axiosInstance.post(apiURL, {
-          ...values,
-          ...additionalData,
-        });
+        await onSubmit(
+          {
+            ...values,
+            ...additionalData,
+          },
+          update
+        );
 
         dispatch(
           showSnackbar({
