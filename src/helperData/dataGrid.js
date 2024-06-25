@@ -4,6 +4,7 @@ export const customersColumn = [
     headerName: "user_id",
     width: 150,
     align: "left",
+    pinnable: true,
   },
   {
     field: "name",
@@ -32,7 +33,7 @@ export const customersColumn = [
   {
     field: "phone",
     headerName: "phone",
-    width: 200,
+    width: 150,
     align: "left",
   },
   {

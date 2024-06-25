@@ -1,15 +1,27 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import useAxios from "../hooks/useAxios";
-import { Box, Button, Container, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, GridMoreVertIcon, GridToolbar } from "@mui/x-data-grid";
 import { customersColumn } from "../helperData/dataGrid";
 import FormDialogue from "../components/common/FormDialogue";
 import { customersModel } from "../helperData/modelData";
 import axiosInstance from "../api/axiosInstance";
+
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "../redux/snackbarSlice";
+import ConfirmDeleteDialog from "../components/confirmDeleteDialogue";
 
 const Customers = () => {
   const { t, i18n } = useTranslation();
@@ -17,7 +29,12 @@ const Customers = () => {
   const [formState, setFormSate] = useState(false);
   const [updateFormState, setUpdateFormSate] = useState(false);
   const [updateData, setUpdateData] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedRow, setSelectedRow] = useState(null);
   const [customers, setCustomers] = useState([]);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+
+  const dispatch = useDispatch();
 
   const options = useMemo(() => ({}), []);
   const { data, loading, error, refetch } = useAxios(
@@ -31,8 +48,34 @@ const Customers = () => {
     }
   }, [data]);
 
+  const handleMenuOpen = (event, row) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedRow(row);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(false);
+    setSelectedRow(null);
+  };
+
   const handleClickOpen = () => {
     setFormSate(true);
+  };
+  const handleDelete = async (id) => {
+    try {
+      await axiosInstance.delete(`/users/${id}`);
+      refetch();
+    } catch (error) {
+      console.error("Error deleting customer:", error);
+    }
+    dispatch(
+      showSnackbar({
+        message: "User deleted successfully!",
+        severity: "success",
+      })
+    );
+    handleMenuClose();
+    setConfirmDialogOpen(false);
   };
   const handleFormSubmit = async (formData, update) => {
     try {
@@ -45,7 +88,7 @@ const Customers = () => {
       } else {
         response = await axiosInstance.post("/users", formData);
       }
-      await refetch();
+      refetch();
     } catch (error) {
       throw error;
     }
@@ -69,32 +112,23 @@ const Customers = () => {
       }),
       {
         field: "actions",
-        headerName: "Actions",
+        headerName: t("actions"),
 
         renderCell: (params) => (
           <div>
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<EditIcon />}
-              onClick={() => handleEdit(params.row)}
-              style={{ marginRight: 8 }}
+            <IconButton
+              aria-label="more"
+              aria-controls="long-menu"
+              aria-haspopup="true"
+              onClick={(event) => handleMenuOpen(event, params.row)}
             >
-              Edit
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              startIcon={<DeleteIcon />}
-              onClick={() => handleDelete(params.row.id)}
-            >
-              Delete
-            </Button>
+              <GridMoreVertIcon />
+            </IconButton>
           </div>
         ),
       },
     ];
-  }, [t]);
+  }, [t, anchorEl]);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
@@ -156,6 +190,26 @@ const Customers = () => {
           user_type_id: import.meta.env.VITE_BORROWER_ROLE,
         }}
         onSubmit={handleFormSubmit}
+      />
+      <Menu
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+      >
+        <MenuItem onClick={() => handleEdit(selectedRow)}>
+          <EditIcon color="primary" style={{ marginRight: 8 }} />
+          {t("edit")}
+        </MenuItem>
+        <MenuItem onClick={() => setConfirmDialogOpen(true)}>
+          <DeleteIcon color="secondary" style={{ marginRight: 8 }} />
+          {t("delete")}
+        </MenuItem>
+      </Menu>
+      <ConfirmDeleteDialog
+        open={confirmDialogOpen}
+        handleClose={() => setConfirmDialogOpen(false)}
+        handleConfirm={() => handleDelete(selectedRow.user_id)}
       />
     </Container>
   );

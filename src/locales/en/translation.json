@@ -13,9 +13,14 @@
   "phone": "Phone",
   "address": "Address",
   "cibil": "CIBIL",
+  "actions": "Actions",
   "create_new_customer": "Create New Customer",
   "cancel": "Cancel",
   "add": "Add",
   "update_customer": "Update Customer",
-  "update": "Update"
+  "update": "Update",
+  "edit": "Edit",
+  "delete": "Delete",
+  "confirm_delete": "Confirm Delete",
+  "confirm_delete_message": "Are you sure you want to delete!"
 }

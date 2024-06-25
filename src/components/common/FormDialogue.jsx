@@ -137,7 +137,6 @@ FormDialogue.propTypes = {
   formTitle: PropTypes.string.isRequired,
   update: PropTypes.bool.isRequired,
   updateData: PropTypes.object,
-  apiURL: PropTypes.string.isRequired,
   additionalData: PropTypes.object,
 };
 
