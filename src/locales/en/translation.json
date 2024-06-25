@@ -4,16 +4,17 @@
   "loans": "Loans",
   "profile": "Profile",
   "settings": "Settings",
-  "create new": "Create New",
-  "user id": "User ID",
+  "create_new": "Create New",
+  "user_id": "User ID",
   "name": "Name",
-  "tamil name": "Tamil Name",
+  "tamil_name": "Tamil Name",
   "alias": "Alias",
   "email": "Email",
   "phone": "Phone",
   "address": "Address",
   "cibil": "CIBIL",
-  "create new customer": "Create New Customer",
+  "create_new_customer": "Create New Customer",
   "cancel": "Cancel",
-  "add": "Add"
+  "add": "Add",
+  "update": "Update"
 }

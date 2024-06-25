@@ -27,9 +27,15 @@ const Menu = () => {
     <Drawer
       variant="permanent"
       sx={{
-        width: 200,
+        width: "100%",
         flexShrink: 0,
-        [`& .MuiDrawer-paper`]: { width: 200, boxSizing: "border-box" },
+        flexBasis: "15%",
+        minWidth: 200,
+        [`& .MuiDrawer-paper`]: {
+          minWidth: 200,
+          width: "15%",
+          boxSizing: "border-box",
+        },
       }}
       position={"relative"}
     >

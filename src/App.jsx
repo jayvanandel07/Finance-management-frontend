@@ -15,6 +15,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Menu from "./components/Menu";
 import Customers from "./pages/Customers";
 import GlobalSnackbar from "./components/common/GlobalSnackbar";
+import { Box, Container } from "@mui/material";
 
 const App = () => {
   useEffect(() => {
@@ -52,7 +53,7 @@ const App = () => {
 const MainApp = () => (
   <div style={{ display: "flex" }}>
     <Menu />
-    <div style={{ flex: 1 }}>
+    <Box sx={{ flexBasis: "85%" }} width={"100%"}>
       <Routes>
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="customers" element={<Customers />} />
@@ -60,7 +61,7 @@ const MainApp = () => (
         <Route path="settings" element={<Settings />} />
         <Route path="*" element={<Navigate to="dashboard" />} />
       </Routes>
-    </div>
+    </Box>
     <GlobalSnackbar />
   </div>
 );
