@@ -15,7 +15,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid, GridMoreVertIcon, GridToolbar } from "@mui/x-data-grid";
 import { customersColumn } from "../helperData/dataGrid";
-import FormDialogue from "../components/common/FormDialogue";
+import FormDialogue from "../components/FormDialogue";
 import { customersModel } from "../helperData/modelData";
 import axiosInstance from "../api/axiosInstance";
 
@@ -89,6 +89,7 @@ const Customers = () => {
         response = await axiosInstance.post("/users", formData);
       }
       refetch();
+      handleMenuClose();
     } catch (error) {
       throw error;
     }
@@ -174,9 +175,6 @@ const Customers = () => {
         formTitle={t("create_new_customer")}
         update={false}
         updateData={null}
-        additionalData={{
-          user_type_id: import.meta.env.VITE_BORROWER_ROLE,
-        }}
         onSubmit={handleFormSubmit}
       />
       <FormDialogue
@@ -186,9 +184,6 @@ const Customers = () => {
         formTitle={t("update_customer")}
         update={true}
         updateData={updateData}
-        additionalData={{
-          user_type_id: import.meta.env.VITE_BORROWER_ROLE,
-        }}
         onSubmit={handleFormSubmit}
       />
       <Menu

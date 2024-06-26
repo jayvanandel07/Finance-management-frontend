@@ -10,11 +10,14 @@ import {
 } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { logout } from "../redux/authSlice";
+import { useDispatch } from "react-redux";
 
 const Menu = () => {
   const { t, i18n } = useTranslation();
   const location = useLocation();
   const [selectedMenu, setSelectedMenu] = useState(location.pathname);
+  const dispatch = useDispatch();
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
@@ -46,7 +49,7 @@ const Menu = () => {
         <List>
           <ListItemButton
             component={Link}
-            to="/app/dashboard"
+            to="dashboard"
             selected={selectedMenu.includes("dashboard")}
             onClick={(event) => handleListItemClick("dashboard")}
           >
@@ -54,7 +57,7 @@ const Menu = () => {
           </ListItemButton>
           <ListItemButton
             component={Link}
-            to="/app/customers"
+            to="customers"
             selected={selectedMenu.includes("customers")}
             onClick={(event) => handleListItemClick("customers")}
           >
@@ -86,24 +89,33 @@ const Menu = () => {
           </ListItemButton>
         </List>
       </Box>
-      <Box
-        position={"absolute"}
-        bottom={0}
-        display={"flex"}
-        paddingInline={1}
-        gap={1}
-        width={"100%"}
-        padding={1}
-      >
-        <Box flexBasis={"50%"}>
-          <Button variant="outlined" onClick={() => changeLanguage("en")}>
-            English
+      <Box position={"absolute"} bottom={0}>
+        <Box padding={1}>
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={() => dispatch(logout())}
+          >
+            {t("logout")}
           </Button>
         </Box>
-        <Box flexBasis={"50%"}>
-          <Button variant="outlined" onClick={() => changeLanguage("ta")}>
-            Tamil
-          </Button>
+        <Box
+          display={"flex"}
+          paddingInline={1}
+          gap={1}
+          width={"100%"}
+          padding={1}
+        >
+          <Box flexBasis={"50%"}>
+            <Button variant="outlined" onClick={() => changeLanguage("en")}>
+              English
+            </Button>
+          </Box>
+          <Box flexBasis={"50%"}>
+            <Button variant="outlined" onClick={() => changeLanguage("ta")}>
+              Tamil
+            </Button>
+          </Box>
         </Box>
       </Box>
     </Drawer>

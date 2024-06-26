@@ -14,20 +14,29 @@ import Settings from "./pages/Settings";
 import PrivateRoute from "./components/PrivateRoute";
 import Menu from "./components/Menu";
 import Customers from "./pages/Customers";
-import GlobalSnackbar from "./components/common/GlobalSnackbar";
-import { Box, Container } from "@mui/material";
+import GlobalSnackbar from "./components/GlobalSnackbar";
+import { Box } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "./redux/authSlice";
 
 const App = () => {
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      const currentTime = Date.now() / 1000;
+  const { token } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
-      if (decodedToken.exp < currentTime) {
-        // Token has expired
-        localStorage.removeItem("token");
-        window.location.href = "/login"; // Redirect to login page
+  useEffect(() => {
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
+
+        if (decodedToken.exp < currentTime) {
+          // Token has expired
+          localStorage.removeItem("token");
+          window.location.href = "/login"; // Redirect to login page
+        }
+      } catch (error) {
+        console.log(error);
+        dispatch(logout());
       }
     }
   }, []);

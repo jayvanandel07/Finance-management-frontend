@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
-import { selectSnackbar, hideSnackbar } from "../../redux/snackbarSlice";
+import { selectSnackbar, hideSnackbar } from "../redux/snackbarSlice";
 
 const GlobalSnackbar = () => {
   const { open, message, severity } = useSelector(selectSnackbar);

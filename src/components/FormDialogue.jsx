@@ -11,10 +11,10 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
-import { showSnackbar } from "../../redux/snackbarSlice";
+import { showSnackbar } from "../redux/snackbarSlice";
 import { useFormik } from "formik";
 import PropTypes from "prop-types";
-import { generateValidationSchema } from "../../utils/validationSchema";
+import { generateValidationSchema } from "../utils/validationSchema";
 
 const FormDialogue = ({
   formState,

@@ -1,4 +1,7 @@
 {
+  "login": "Login",
+  "logout": "Logout",
+  "register": "Register",
   "dashboard": "Dashboard",
   "customers": "Customers",
   "loans": "Loans",
@@ -20,6 +23,7 @@
   "update_customer": "Update Customer",
   "update": "Update",
   "edit": "Edit",
+  "submit": "Submit",
   "delete": "Delete",
   "confirm_delete": "Confirm Delete",
   "confirm_delete_message": "Are you sure you want to delete!"

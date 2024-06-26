@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { decodeJWT } from "../utils/jwtDecoder";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -47,10 +46,6 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     token: localStorage.getItem("token") || null,
-    userType:
-      (localStorage.getItem("token") &&
-        decodeJWT(localStorage.getItem("token")).userType) ||
-      null,
     loading: false,
     error: null,
   },
@@ -69,7 +64,6 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.token = action.payload;
-        state.userType = decodeJWT(action.payload).userType;
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -82,7 +76,6 @@ const authSlice = createSlice({
       .addCase(register.fulfilled, (state, action) => {
         state.loading = false;
         state.token = action.payload;
-        state.userType = decodeJWT(action.payload).userType;
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
