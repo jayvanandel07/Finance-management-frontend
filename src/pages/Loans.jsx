@@ -22,7 +22,7 @@ import axiosInstance from "../api/axiosInstance";
 
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../redux/snackbarSlice";
-import ConfirmDeleteDialog from "../components/confirmDialogue";
+import ConfirmDeleteDialog from "../components/ConfirmDialog";
 
 const Loans = () => {
   const { t, i18n } = useTranslation();
@@ -132,7 +132,7 @@ const Loans = () => {
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <Container sx={{ padding: "16px" }}>
+    <Container maxWidth="xl">
       <Typography variant="h4" gutterBottom>
         {t("customers")}
       </Typography>

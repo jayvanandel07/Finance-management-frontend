@@ -58,27 +58,6 @@ export const customersColumn = [
   },
 ];
 
-// "loan_id": 1,
-// "user_id": 1340033214709760,
-// "amount": "10000.00",
-// "interest_rate": "10.00",
-// "loan_type_id": 1,
-// "loan_created": "as New",
-// "loan_date": "2024-06-05T00:00:00.000Z",
-// "start_date": "2024-06-12T00:00:00.000Z",
-// "end_date": "2024-08-14T00:00:00.000Z",
-// "next_due_date": "2024-06-12T00:00:00.000Z",
-// "balance": "10000.00",
-// "status": "active",
-// "created_at": "2024-06-08T20:37:38.000Z",
-// "updated_at": "2024-06-08T20:37:38.000Z",
-// "is_deleted": 0,
-// "user_name": "Abraham D'Amore Sr.",
-// "user_tamil_name": null,
-// "user_phone": null,
-// "user_address": null,
-// "loan_type_name": "THX"
-
 export const loansColumn = [
   {
     field: "loan_id",

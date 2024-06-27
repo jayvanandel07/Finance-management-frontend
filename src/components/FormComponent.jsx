@@ -157,7 +157,7 @@ FormComponent.propTypes = {
   additionalData: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
   singleAction: PropTypes.bool,
-  setFormState: PropTypes.object,
+  setFormState: PropTypes.func,
 };
 
 export default FormComponent;

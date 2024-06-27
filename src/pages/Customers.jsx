@@ -21,13 +21,17 @@ import axiosInstance from "../api/axiosInstance";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../redux/snackbarSlice";
 import FormComponent from "../components/FormComponent";
-import ConfirmDialog from "../components/confirmDialogue";
+import ConfirmDialog from "../components/ConfirmDialog";
+import Loans from "./Loans";
+import { ViewColumn } from "@mui/icons-material";
+import FullScreenDialog from "../components/FullScreenDialog";
 
 const Customers = () => {
   const { t, i18n } = useTranslation();
 
   const [formState, setFormState] = useState(false);
   const [updateFormState, setUpdateFormState] = useState(false);
+  const [loansDialogState, setLoansDialogState] = useState(false);
   const [updateData, setUpdateData] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
@@ -89,7 +93,6 @@ const Customers = () => {
         response = await axiosInstance.post("/users", formData);
       }
       refetch();
-      handleMenuClose();
     } catch (error) {
       throw error;
     }
@@ -195,11 +198,30 @@ const Customers = () => {
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
       >
-        <MenuItem onClick={() => handleEdit(selectedRow)}>
+        <MenuItem
+          onClick={() => {
+            setLoansDialogState(true);
+            handleMenuClose();
+          }}
+        >
+          <ViewColumn color="primary" style={{ marginRight: 8 }} />
+          {t("view_loans")}
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            handleEdit(selectedRow);
+            handleMenuClose();
+          }}
+        >
           <EditIcon color="primary" style={{ marginRight: 8 }} />
           {t("edit")}
         </MenuItem>
-        <MenuItem onClick={() => setConfirmDialogOpen(true)}>
+        <MenuItem
+          onClick={() => {
+            setConfirmDialogOpen(true);
+            handleMenuClose();
+          }}
+        >
           <DeleteIcon color="secondary" style={{ marginRight: 8 }} />
           {t("delete")}
         </MenuItem>
@@ -213,12 +235,17 @@ const Customers = () => {
         open={confirmDialogOpen}
         handleClose={() => {
           setConfirmDialogOpen(false);
-          handleMenuClose();
         }}
         handleConfirm={(confirm) =>
           confirm && handleDelete(selectedRow.user_id)
         }
       />
+      <FullScreenDialog
+        openState={loansDialogState}
+        setOpenState={setLoansDialogState}
+      >
+        <Loans user={selectedRow}></Loans>
+      </FullScreenDialog>
     </Container>
   );
 };
