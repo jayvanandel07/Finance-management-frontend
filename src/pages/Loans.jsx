@@ -17,7 +17,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid, GridMoreVertIcon, GridToolbar } from "@mui/x-data-grid";
 import { loansColumn } from "../helperData/dataGrid";
 import FormComponent from "../components/FormComponent";
-import { loansModel } from "../helperData/modelData";
+import { loansModel } from "../helperData/dataModel";
 import axiosInstance from "../api/axiosInstance";
 
 import { useDispatch } from "react-redux";

@@ -27,5 +27,13 @@
   "submit": "Submit",
   "delete": "Delete",
   "confirm_delete": "Confirm Delete",
-  "confirm_delete_message": "Are you sure you want to delete"
+  "confirm_delete_message": "Are you sure you want to delete",
+  "loan_id": "Loan ID",
+  "user_name": "User Name",
+  "amount": "Amount",
+  "interest_rate": "Interest Rate",
+  "loan_date": "Loan Date",
+  "next_due_date": "Next Due Date",
+  "balance": "Balance",
+  "status": "Status"
 }

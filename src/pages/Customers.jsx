@@ -16,7 +16,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid, GridMoreVertIcon, GridToolbar } from "@mui/x-data-grid";
 import { customersColumn } from "../helperData/dataGrid";
-import { customersModel } from "../helperData/modelData";
+import { customersModel } from "../helperData/dataModel";
 import axiosInstance from "../api/axiosInstance";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../redux/snackbarSlice";
@@ -92,6 +92,7 @@ const Customers = () => {
       } else {
         response = await axiosInstance.post("/users", formData);
       }
+
       refetch();
     } catch (error) {
       throw error;

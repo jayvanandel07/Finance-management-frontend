@@ -31,7 +31,7 @@ const FormComponent = ({
   const validationSchema = generateValidationSchema(dataModel, t);
   const formik = useFormik({
     initialValues: Object.keys(dataModel).reduce((acc, key) => {
-      acc[key] = "";
+      acc[dataModel[key].name] = "";
       return acc;
     }, {}),
     validationSchema: validationSchema,
@@ -56,6 +56,9 @@ const FormComponent = ({
 
         if (!update) {
           resetForm();
+        }
+        if (setFormState) {
+          setFormState(false);
         }
       } catch (error) {
         console.error("Error submitting form:", error);
@@ -84,18 +87,22 @@ const FormComponent = ({
       </Typography>
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
-          {Object.keys(dataModel).map((item, index) => (
+          {dataModel.map((item, index) => (
             <Grid key={index} item xs={12}>
               <TextField
-                label={`${t(`${item}`)}${dataModel[item]?.required ? "*" : ""}`}
+                label={`${t(`${item.name}`)}${item?.required ? "*" : ""}`}
                 variant="outlined"
                 fullWidth
-                name={item}
-                value={formik.values[item] || ""}
+                name={item.name}
+                value={formik.values[item.name] || ""}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched[item] && Boolean(formik.errors[item])}
-                helperText={formik.touched[item] && formik.errors[item]}
+                error={
+                  formik.touched[item.name] && Boolean(formik.errors[item.name])
+                }
+                helperText={
+                  formik.touched[item.name] && formik.errors[item.name]
+                }
                 disabled={formik.isSubmitting}
               />
             </Grid>
@@ -150,7 +157,7 @@ const FormComponent = ({
 };
 
 FormComponent.propTypes = {
-  dataModel: PropTypes.object.isRequired,
+  dataModel: PropTypes.array.isRequired,
   formTitle: PropTypes.string.isRequired,
   update: PropTypes.bool.isRequired,
   updateData: PropTypes.object,

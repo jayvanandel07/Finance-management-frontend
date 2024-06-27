@@ -2,24 +2,25 @@ import * as yup from "yup";
 
 export const generateValidationSchema = (dataModel, t) => {
   return yup.object().shape(
-    Object.keys(dataModel).reduce((acc, key) => {
+    dataModel.reduce((acc, field) => {
       let fieldSchema = yup.string();
 
-      if (dataModel[key].required) {
-        fieldSchema = fieldSchema.required(`${t(key)} is required`);
+      if (field.required) {
+        fieldSchema = fieldSchema.required(`${t(field.name)} is required`);
       }
 
-      if (dataModel[key].validation === "number") {
+      if (field.validation === "number") {
         fieldSchema = fieldSchema.matches(
           /^\d+$/,
-          t(`${t(key)} must be a number`)
+          `${t(field.name)} must be a number`
         );
       }
-      if (dataModel[key].validation === "email") {
+
+      if (field.validation === "email") {
         fieldSchema = fieldSchema.email("Invalid email format");
       }
 
-      if (dataModel[key].validation === "phone") {
+      if (field.validation === "phone") {
         fieldSchema = fieldSchema.test(
           "is-valid-phone",
           "Invalid phone number format",
@@ -32,7 +33,7 @@ export const generateValidationSchema = (dataModel, t) => {
         );
       }
 
-      acc[key] = fieldSchema;
+      acc[field.name] = fieldSchema;
       return acc;
     }, {})
   );
