@@ -15,15 +15,16 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid, GridMoreVertIcon, GridToolbar } from "@mui/x-data-grid";
-import { customersColumn } from "../helperData/dataGrid";
-import { customersModel } from "../helperData/modelData";
+import { loansColumn } from "../helperData/dataGrid";
+import FormComponent from "../components/FormComponent";
+import { loansModel } from "../helperData/modelData";
 import axiosInstance from "../api/axiosInstance";
+
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../redux/snackbarSlice";
-import FormComponent from "../components/FormComponent";
-import ConfirmDialog from "../components/confirmDialogue";
+import ConfirmDeleteDialog from "../components/confirmDialogue";
 
-const Customers = () => {
+const Loans = () => {
   const { t, i18n } = useTranslation();
 
   const [formState, setFormState] = useState(false);
@@ -31,20 +32,17 @@ const Customers = () => {
   const [updateData, setUpdateData] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
-  const [customers, setCustomers] = useState([]);
+  const [loans, setLoans] = useState([]);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
 
   const dispatch = useDispatch();
 
   const options = useMemo(() => ({}), []);
-  const { data, loading, error, refetch } = useAxios(
-    "/users/role/Borrower",
-    options
-  );
+  const { data, loading, error, refetch } = useAxios("/loans", options);
 
   useEffect(() => {
     if (data) {
-      setCustomers(data);
+      setLoans(data);
     }
   }, [data]);
 
@@ -63,14 +61,14 @@ const Customers = () => {
   };
   const handleDelete = async (id) => {
     try {
-      await axiosInstance.delete(`/users/${id}`);
+      await axiosInstance.delete(`/loans/${id}`);
       refetch();
     } catch (error) {
-      console.error("Error deleting customer:", error);
+      console.error("Error deleting loan:", error);
     }
     dispatch(
       showSnackbar({
-        message: "User deleted successfully!",
+        message: "Loan deleted successfully!",
         severity: "success",
       })
     );
@@ -105,7 +103,7 @@ const Customers = () => {
   };
   const columns = useMemo(() => {
     return [
-      ...customersColumn.map((item) => {
+      ...loansColumn.map((item) => {
         return {
           ...item,
           headerName: t(item.headerName),
@@ -134,7 +132,7 @@ const Customers = () => {
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <Container sx={{ padding: "16px", minWidth: "100%" }}>
+    <Container sx={{ padding: "16px" }}>
       <Typography variant="h4" gutterBottom>
         {t("customers")}
       </Typography>
@@ -151,17 +149,16 @@ const Customers = () => {
       <Box
         sx={{
           width: "100%",
-          height: 650,
+          height: 600,
           overflow: "scroll",
         }}
       >
         <DataGrid
-          rows={customers}
+          rows={loans}
           columns={columns}
           getRowId={(row) => {
             return row.user_id;
           }}
-          sx={{ flexGrow: 1 }}
           pageSizeOptions={[10, 100, { value: 1000, label: "1,000" }]}
           disableSelectionOnClick
           components={{
@@ -169,25 +166,23 @@ const Customers = () => {
           }}
         />
       </Box>
-      <Dialog open={formState} onClose={() => setFormState(false)}>
+      <Dialog formState={formState} setFormState={setFormState}>
         <FormComponent
-          dataModel={customersModel}
+          dataModel={loansModel}
           formTitle={t("create_new_customer")}
           update={false}
           updateData={null}
           onSubmit={handleFormSubmit}
-          setFormState={setFormState}
-        />
+        ></FormComponent>
       </Dialog>
-      <Dialog open={updateFormState} onClose={() => setUpdateFormState(false)}>
+      <Dialog formState={updateFormState} setFormState={setUpdateFormState}>
         <FormComponent
-          dataModel={customersModel}
+          dataModel={loansModel}
           formTitle={t("update_customer")}
           update={true}
           updateData={updateData}
           onSubmit={handleFormSubmit}
-          setFormState={setUpdateFormState}
-        />
+        ></FormComponent>
       </Dialog>
       <Menu
         anchorEl={anchorEl}
@@ -204,23 +199,13 @@ const Customers = () => {
           {t("delete")}
         </MenuItem>
       </Menu>
-      <ConfirmDialog
-        confirmType="secondary"
-        confirmTitle={t("confirm_delete")}
-        confirmDescription={
-          t("confirm_delete_message") + " : " + selectedRow?.user_id
-        }
+      <ConfirmDeleteDialog
         open={confirmDialogOpen}
-        handleClose={() => {
-          setConfirmDialogOpen(false);
-          handleMenuClose();
-        }}
-        handleConfirm={(confirm) =>
-          confirm && handleDelete(selectedRow.user_id)
-        }
+        handleClose={() => setConfirmDialogOpen(false)}
+        handleConfirm={() => handleDelete(selectedRow.user_id)}
       />
     </Container>
   );
 };
 
-export default Customers;
+export default Loans;

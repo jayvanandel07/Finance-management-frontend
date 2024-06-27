@@ -9,10 +9,10 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
-import { showSnackbar } from "../../redux/snackbarSlice";
+import { showSnackbar } from "../redux/snackbarSlice";
 import { useFormik } from "formik";
 import PropTypes from "prop-types";
-import { generateValidationSchema } from "../../utils/validationSchema";
+import { generateValidationSchema } from "../utils/validationSchema";
 
 const FormComponent = ({
   dataModel,
@@ -21,6 +21,8 @@ const FormComponent = ({
   updateData = null,
   additionalData = {},
   onSubmit,
+  singleAction = false,
+  setFormState = {},
 }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -105,9 +107,30 @@ const FormComponent = ({
           justifyContent="flex-end"
           style={{ marginTop: 16 }}
         >
-          <Grid item>
+          {!singleAction && (
+            <Grid item width={singleAction ? "100%" : "fit-content"}>
+              <Button
+                fullWidth
+                variant="outlined"
+                color="primary"
+                disabled={formik.isSubmitting}
+                onClick={() => {
+                  setFormState(false);
+                }}
+              >
+                {formik.isSubmitting ? (
+                  <CircularProgress size={24} />
+                ) : (
+                  t("cancel")
+                )}
+              </Button>
+            </Grid>
+          )}
+          <Grid item width={singleAction ? "100%" : "fit-content"}>
             <Button
+              fullWidth
               type="submit"
+              variant="contained"
               color="primary"
               disabled={formik.isSubmitting}
             >
@@ -133,6 +156,8 @@ FormComponent.propTypes = {
   updateData: PropTypes.object,
   additionalData: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
+  singleAction: PropTypes.bool,
+  setFormState: PropTypes.object,
 };
 
 export default FormComponent;

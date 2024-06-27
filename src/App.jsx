@@ -18,6 +18,7 @@ import GlobalSnackbar from "./components/GlobalSnackbar";
 import { Box } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "./redux/authSlice";
+import Loans from "./pages/Loans";
 
 const App = () => {
   const { token } = useSelector((state) => state.auth);
@@ -66,6 +67,7 @@ const MainApp = () => (
       <Routes>
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="customers" element={<Customers />} />
+        <Route path="loans" element={<Loans />} />
         <Route path="profile" element={<Profile />} />
         <Route path="settings" element={<Settings />} />
         <Route path="*" element={<Navigate to="dashboard" />} />

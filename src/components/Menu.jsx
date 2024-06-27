@@ -30,13 +30,10 @@ const Menu = () => {
     <Drawer
       variant="permanent"
       sx={{
-        width: "100%",
         flexShrink: 0,
-        flexBasis: "15%",
-        minWidth: 200,
+        flexBasis: "max(200px,15%)",
         [`& .MuiDrawer-paper`]: {
-          minWidth: 200,
-          width: "15%",
+          width: "max(200px,15%)",
           boxSizing: "border-box",
         },
       }}
@@ -89,7 +86,7 @@ const Menu = () => {
           </ListItemButton>
         </List>
       </Box>
-      <Box position={"absolute"} bottom={0}>
+      <Box position={"absolute"} bottom={0} width={"100%"}>
         <Box padding={1}>
           <Button
             fullWidth
@@ -107,12 +104,20 @@ const Menu = () => {
           padding={1}
         >
           <Box flexBasis={"50%"}>
-            <Button variant="outlined" onClick={() => changeLanguage("en")}>
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={() => changeLanguage("en")}
+            >
               English
             </Button>
           </Box>
           <Box flexBasis={"50%"}>
-            <Button variant="outlined" onClick={() => changeLanguage("ta")}>
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={() => changeLanguage("ta")}
+            >
               Tamil
             </Button>
           </Box>

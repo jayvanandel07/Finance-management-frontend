@@ -10,7 +10,14 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-const ConfirmDeleteDialog = ({ open, handleClose, handleConfirm }) => {
+const ConfirmDialog = ({
+  open,
+  handleClose,
+  handleConfirm,
+  confirmTitle = "Confirm",
+  confirmDescription = "Are you sure?",
+  confirmType = "primary",
+}) => {
   const { t } = useTranslation();
 
   return (
@@ -20,20 +27,24 @@ const ConfirmDeleteDialog = ({ open, handleClose, handleConfirm }) => {
       open={open}
       onClose={handleClose}
     >
-      <DialogTitle>{t("confirm_delete")}</DialogTitle>
+      <DialogTitle>{confirmTitle}</DialogTitle>
       <DialogContent>
-        <DialogContentText>{t("confirm_delete_message")}</DialogContentText>
+        <DialogContentText>{confirmDescription}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="primary">
+        <Button variant="outlined" onClick={handleClose} color="primary">
           {t("cancel")}
         </Button>
-        <Button onClick={handleConfirm} color="secondary">
-          {t("delete")}
+        <Button
+          variant="contained"
+          color={confirmType}
+          onClick={() => handleConfirm(true)}
+        >
+          {t("confirm")}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default ConfirmDeleteDialog;
+export default ConfirmDialog;
