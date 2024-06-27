@@ -137,7 +137,7 @@ const Customers = () => {
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <Container sx={{ padding: "16px", minWidth: "100%" }}>
+    <Container maxWidth="xl">
       <Typography variant="h4" gutterBottom>
         {t("customers")}
       </Typography>

@@ -62,7 +62,7 @@ export const loansColumn = [
   {
     field: "loan_id",
     headerName: "loan_id",
-    minWidth: 150,
+    minWidth: 100,
     flex: 1,
     align: "left",
     pinnable: true,

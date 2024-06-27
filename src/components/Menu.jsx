@@ -31,11 +31,12 @@ const Menu = () => {
       variant="permanent"
       sx={{
         flexShrink: 0,
-        flexBasis: "max(200px,15%)",
+        flexBasis: "max(200px,15vw)",
         [`& .MuiDrawer-paper`]: {
-          width: "max(200px,15%)",
           boxSizing: "border-box",
+          width: "max(200px,15vw)",
         },
+        height: "100vh",
       }}
       position={"relative"}
     >

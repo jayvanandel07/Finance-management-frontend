@@ -61,9 +61,9 @@ const App = () => {
 };
 
 const MainApp = () => (
-  <div style={{ display: "flex" }}>
+  <div style={{ display: "flex", width: "100vw" }}>
     <Menu />
-    <Box sx={{ flexBasis: "85%" }} width={"100%"}>
+    <Box padding={2} sx={{ width: "85vw" }}>
       <Routes>
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="customers" element={<Customers />} />
