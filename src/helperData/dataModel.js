@@ -22,14 +22,63 @@ export const customersModel = [
 ];
 
 export const loansModel = [
-  { name: "user_id", required: true, validation: "number" },
-  { name: "amount", required: true },
-  { name: "interest_rate" },
-  { name: "loan_type_id" },
-  { name: "loan_date" },
-  { name: "start_date" },
-  { name: "end_date" },
-  { name: "next_due_date" },
-  { name: "balance" },
-  { name: "status" },
+  { name: "user_id", required: true, validation: "number", disabled: true },
+  { name: "name", required: true, disabled: true },
+  { name: "amount", required: true, validation: "number" },
+  {
+    name: "accounts",
+    type: "custom",
+    apiUrl: "/accounts",
+  },
+
+  {
+    name: "loan_type_id",
+    label: "type_name",
+    type: "dropdown",
+    apiUrl: "/loanTypes",
+    required: true,
+    setFields: [
+      {
+        name: "interest_rate",
+        value: "interest_rate",
+      },
+      {
+        name: "due_frequency",
+        value: "frequency",
+      },
+      {
+        name: "due_time_unit",
+        value: "time_unit",
+      },
+      {
+        name: "due_tenure",
+        value: "tenure",
+      },
+    ],
+  },
+  {
+    name: "interest_rate",
+    value: "interest_rate",
+  },
+  {
+    name: "due_frequency",
+    value: "frequency",
+  },
+  {
+    name: "due_time_unit",
+    value: "time_unit",
+  },
+  {
+    name: "due_tenure",
+    value: "tenure",
+  },
+  {
+    name: "loan_created",
+    value: "loan_created",
+    default: "As New",
+    required: true,
+  },
+
+  { name: "loan_date", type: "date", required: true },
+  { name: "start_date", type: "date", required: true },
 ];

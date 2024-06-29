@@ -45,7 +45,6 @@ const Login = () => {
           id="userId"
           label="User ID"
           name="User ID"
-          autoComplete="user ID"
           autoFocus
           value={userId}
           onChange={(e) => setUserId(e.target.value)}
@@ -58,7 +57,6 @@ const Login = () => {
           label="Password"
           type="password"
           id="password"
-          autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />

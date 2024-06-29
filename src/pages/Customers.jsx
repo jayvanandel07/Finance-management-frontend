@@ -16,21 +16,24 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid, GridMoreVertIcon, GridToolbar } from "@mui/x-data-grid";
 import { customersColumn } from "../helperData/dataGrid";
-import { customersModel } from "../helperData/dataModel";
+import { customersModel, loansModel } from "../helperData/dataModel";
 import axiosInstance from "../api/axiosInstance";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../redux/snackbarSlice";
 import FormComponent from "../components/FormComponent";
 import ConfirmDialog from "../components/ConfirmDialog";
 import Loans from "./Loans";
-import { ViewColumn } from "@mui/icons-material";
+import { Add, ViewColumn } from "@mui/icons-material";
 import FullScreenDialog from "../components/FullScreenDialog";
+import AccountForm from "../components/Loan/AccountForm";
+import { processLoanData, removeEmptyValues } from "../utils/core.services";
 
 const Customers = () => {
   const { t, i18n } = useTranslation();
 
   const [formState, setFormState] = useState(false);
   const [updateFormState, setUpdateFormState] = useState(false);
+  const [createLoanFormSate, setCreateLoanFormSate] = useState(false);
   const [loansDialogState, setLoansDialogState] = useState(false);
   const [updateData, setUpdateData] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -54,11 +57,13 @@ const Customers = () => {
 
   const handleMenuOpen = (event, row) => {
     setAnchorEl(event.currentTarget);
+    setUpdateData(row);
     setSelectedRow(row);
   };
 
   const handleMenuClose = () => {
     setAnchorEl(false);
+
     setSelectedRow(null);
   };
 
@@ -82,6 +87,7 @@ const Customers = () => {
     setConfirmDialogOpen(false);
   };
   const handleFormSubmit = async (formData, update) => {
+    removeEmptyValues(formData);
     try {
       let response;
       if (update) {
@@ -98,7 +104,16 @@ const Customers = () => {
       throw error;
     }
   };
+  const handleCreateLoanFormSubmit = async (formData) => {
+    processLoanData(formData);
+    removeEmptyValues(formData);
 
+    try {
+      await axiosInstance.post("/loans", formData);
+    } catch (error) {
+      throw error;
+    }
+  };
   const handleEdit = (data) => {
     setUpdateData(
       Object.fromEntries(
@@ -193,6 +208,20 @@ const Customers = () => {
           setFormState={setUpdateFormState}
         />
       </Dialog>
+      <Dialog
+        open={createLoanFormSate}
+        onClose={() => setCreateLoanFormSate(false)}
+      >
+        <FormComponent
+          dataModel={loansModel}
+          formTitle={t("create_loan")}
+          preSetValues={updateData}
+          onSubmit={handleCreateLoanFormSubmit}
+          setFormState={setCreateLoanFormSate}
+        >
+          <AccountForm />
+        </FormComponent>
+      </Dialog>
       <Menu
         anchorEl={anchorEl}
         keepMounted
@@ -207,6 +236,15 @@ const Customers = () => {
         >
           <ViewColumn color="primary" style={{ marginRight: 8 }} />
           {t("view_loans")}
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setCreateLoanFormSate(true);
+            handleMenuClose();
+          }}
+        >
+          <Add color="primary" style={{ marginRight: 8 }} />
+          {t("create_loan")}
         </MenuItem>
         <MenuItem
           onClick={() => {
