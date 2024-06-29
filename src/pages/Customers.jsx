@@ -15,7 +15,7 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid, GridMoreVertIcon, GridToolbar } from "@mui/x-data-grid";
-import { customersColumn } from "../helperData/dataGrid";
+
 import { customersModel, loansModel } from "../helperData/dataModel";
 import axiosInstance from "../api/axiosInstance";
 import { useDispatch } from "react-redux";
@@ -27,6 +27,7 @@ import { Add, ViewColumn } from "@mui/icons-material";
 import FullScreenDialog from "../components/FullScreenDialog";
 import AccountForm from "../components/Loan/AccountForm";
 import { processLoanData, removeEmptyValues } from "../utils/core.services";
+import { customersColumn } from "../helperData/dataGrid";
 
 const Customers = () => {
   const { t, i18n } = useTranslation();
@@ -63,8 +64,6 @@ const Customers = () => {
 
   const handleMenuClose = () => {
     setAnchorEl(false);
-
-    setSelectedRow(null);
   };
 
   const handleClickOpen = () => {
@@ -180,7 +179,6 @@ const Customers = () => {
           getRowId={(row) => {
             return row.user_id;
           }}
-          sx={{ flexGrow: 1 }}
           pageSizeOptions={[10, 100, { value: 1000, label: "1,000" }]}
           disableSelectionOnClick
           components={{

@@ -15,11 +15,57 @@ import PrivateRoute from "./components/PrivateRoute";
 import Menu from "./components/Menu";
 import Customers from "./pages/Customers";
 import GlobalSnackbar from "./components/GlobalSnackbar";
-import { Box } from "@mui/material";
+import { Box, ThemeProvider, createTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "./redux/authSlice";
 import Loans from "./pages/Loans";
 
+const theme = createTheme({
+  typography: {
+    fontFamily: [
+      "Arial",
+      "sans-serif",
+      // You can add fallback fonts here
+    ].join(","),
+  },
+
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: `
+        @font-face {
+          font-family: 'Arial';
+          font-style: normal;
+          font-display: swap;
+          font-weight: 400;
+          // You might need to add src if you're using a custom font
+        }
+      `,
+    },
+    MuiDataGrid: {
+      styleOverrides: {
+        root: {
+          borderColor: "primary.light",
+          "& .MuiDataGrid-cell": {
+            borderRight: "1px solid #e0e0e0",
+          },
+
+          "& .MuiDataGrid-columnHeaders .MuiDataGrid-columnHeaderTitle  ": {
+            fontWeight: "800",
+          },
+          "& .MuiDataGrid-cell:hover": {
+            color: "primary.main",
+          },
+          "& .MuiDataGrid-row:nth-of-type(even)": {
+            backgroundColor: "#f5f5f5",
+          },
+        },
+        columnHeaders: {
+          fontWeight: "600",
+        },
+      },
+    },
+  },
+});
 const App = () => {
   const { token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -42,21 +88,23 @@ const App = () => {
     }
   }, []);
   return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route
-          path="/app/*"
-          element={
-            <PrivateRoute>
-              <MainApp />
-            </PrivateRoute>
-          }
-        />
-        <Route path="*" element={<Navigate to="/login" />} />
-      </Routes>
-    </Router>
+    <ThemeProvider theme={theme}>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/app/*"
+            element={
+              <PrivateRoute>
+                <MainApp />
+              </PrivateRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 };
 

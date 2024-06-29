@@ -44,5 +44,6 @@
   "end_date": "End Date",
   "next_due_date": "Next Due Date",
   "balance": "Balance",
-  "status": "Status"
+  "status": "Status",
+  "loan_type_name": "Loan Type Name"
 }

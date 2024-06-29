@@ -6,6 +6,7 @@ import {
   Button,
   Container,
   Dialog,
+  Grid,
   IconButton,
   Menu,
   MenuItem,
@@ -15,14 +16,18 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid, GridMoreVertIcon, GridToolbar } from "@mui/x-data-grid";
-import { loansColumn } from "../helperData/dataGrid";
-import FormComponent from "../components/FormComponent";
-import { loansModel } from "../helperData/dataModel";
-import axiosInstance from "../api/axiosInstance";
 
+import { loansModel, paymentModel } from "../helperData/dataModel";
+import axiosInstance from "../api/axiosInstance";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../redux/snackbarSlice";
-import ConfirmDeleteDialog from "../components/ConfirmDialog";
+import FormComponent from "../components/FormComponent";
+import ConfirmDialog from "../components/ConfirmDialog";
+import { Add, ViewColumn } from "@mui/icons-material";
+import FullScreenDialog from "../components/FullScreenDialog";
+import AccountForm from "../components/Loan/AccountForm";
+import { processLoanData, removeEmptyValues } from "../utils/core.services";
+import { loansColumn } from "../helperData/dataGrid";
 
 const Loans = () => {
   const { t, i18n } = useTranslation();
@@ -30,6 +35,7 @@ const Loans = () => {
   const [formState, setFormState] = useState(false);
   const [updateFormState, setUpdateFormState] = useState(false);
   const [updateData, setUpdateData] = useState(null);
+  const [createPaymentForm, setCreatePaymentForm] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
   const [loans, setLoans] = useState([]);
@@ -48,12 +54,12 @@ const Loans = () => {
 
   const handleMenuOpen = (event, row) => {
     setAnchorEl(event.currentTarget);
+    setUpdateData(row);
     setSelectedRow(row);
   };
 
   const handleMenuClose = () => {
     setAnchorEl(false);
-    setSelectedRow(null);
   };
 
   const handleClickOpen = () => {
@@ -64,11 +70,11 @@ const Loans = () => {
       await axiosInstance.delete(`/loans/${id}`);
       refetch();
     } catch (error) {
-      console.error("Error deleting loan:", error);
+      console.error("Error deleting loans:", error);
     }
     dispatch(
       showSnackbar({
-        message: "Loan deleted successfully!",
+        message: "loans deleted successfully!",
         severity: "success",
       })
     );
@@ -76,18 +82,29 @@ const Loans = () => {
     setConfirmDialogOpen(false);
   };
   const handleFormSubmit = async (formData, update) => {
+    processLoanData(formData);
+    removeEmptyValues(formData);
+
     try {
       let response;
       if (update) {
         response = await axiosInstance.put(
-          `/users/${updateData.user_id}`,
+          `/loans/${updateData.loan_id}`,
           formData
         );
       } else {
-        response = await axiosInstance.post("/users", formData);
+        response = await axiosInstance.post("/loans", formData);
       }
+
       refetch();
-      handleMenuClose();
+    } catch (error) {
+      throw error;
+    }
+  };
+  const handlePaymentFormSubmit = async (formData) => {
+    try {
+      await axiosInstance.post("/payments", formData);
+      refetch();
     } catch (error) {
       throw error;
     }
@@ -103,38 +120,56 @@ const Loans = () => {
   };
   const columns = useMemo(() => {
     return [
-      ...loansColumn.map((item) => {
+      ...loansColumn.map((item, index) => {
+        if (item.field === "payment") {
+          return {
+            field: "actions",
+            headerName: t("actions"),
+            minWidth: "200",
+            renderCell: (params) => (
+              <Grid item>
+                <Button
+                  onClick={() => {
+                    setCreatePaymentForm(true);
+                  }}
+                >
+                  <Add color="primary" style={{ marginRight: 8 }} />
+                  {t("add_payment")}
+                </Button>
+                <IconButton
+                  aria-label="more"
+                  aria-controls="long-menu"
+                  aria-haspopup="true"
+                  onClick={(event) => handleMenuOpen(event, params.row)}
+                >
+                  <GridMoreVertIcon />
+                </IconButton>
+              </Grid>
+            ),
+          };
+        }
         return {
           ...item,
           headerName: t(item.headerName),
         };
       }),
-      {
-        field: "actions",
-        headerName: t("actions"),
-
-        renderCell: (params) => (
-          <div>
-            <IconButton
-              aria-label="more"
-              aria-controls="long-menu"
-              aria-haspopup="true"
-              onClick={(event) => handleMenuOpen(event, params.row)}
-            >
-              <GridMoreVertIcon />
-            </IconButton>
-          </div>
-        ),
-      },
     ];
   }, [t, anchorEl]);
+  const updatedLoansModel = useMemo(() => {
+    return loansModel.map((item) => {
+      if (item.name === "name") {
+        item.name = "user_name";
+      }
+      return item;
+    });
+  });
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
   return (
     <Container maxWidth="xl">
       <Typography variant="h4" gutterBottom>
-        {t("customers")}
+        {t("loans")}
       </Typography>
       <Box
         display="flex"
@@ -157,7 +192,10 @@ const Loans = () => {
           rows={loans}
           columns={columns}
           getRowId={(row) => {
-            return row.user_id;
+            return row.loan_id;
+          }}
+          sx={{
+            flexGrow: 1,
           }}
           pageSizeOptions={[10, 100, { value: 1000, label: "1,000" }]}
           disableSelectionOnClick
@@ -166,23 +204,60 @@ const Loans = () => {
           }}
         />
       </Box>
-      <Dialog formState={formState} setFormState={setFormState}>
+      <Dialog
+        open={formState}
+        onClose={() => {
+          setFormState(false);
+          setSelectedRow(null);
+        }}
+      >
         <FormComponent
-          dataModel={loansModel}
-          formTitle={t("create_new_customer")}
-          update={false}
-          updateData={null}
+          dataModel={updatedLoansModel}
+          formTitle={t("create_loan")}
           onSubmit={handleFormSubmit}
-        ></FormComponent>
+          setFormState={setFormState}
+        >
+          <AccountForm />
+        </FormComponent>
       </Dialog>
-      <Dialog formState={updateFormState} setFormState={setUpdateFormState}>
+      <Dialog
+        open={updateFormState}
+        onClose={() => {
+          setUpdateFormState(false);
+          setSelectedRow(null);
+        }}
+      >
         <FormComponent
-          dataModel={loansModel}
-          formTitle={t("update_customer")}
+          dataModel={updatedLoansModel}
+          formTitle={t("update_loan")}
           update={true}
           updateData={updateData}
+          preSetValues={updateData}
           onSubmit={handleFormSubmit}
-        ></FormComponent>
+          setFormState={setUpdateFormState}
+        >
+          <AccountForm />
+        </FormComponent>
+      </Dialog>
+      <Dialog
+        open={createPaymentForm}
+        onClose={() => {
+          setCreatePaymentForm(false);
+          setSelectedRow(null);
+        }}
+      >
+        <FormComponent
+          dataModel={paymentModel}
+          formTitle={t("create_payment")}
+          preSetValues={{
+            ...selectedRow,
+            amount: selectedRow?.amount * (selectedRow?.interest_rate / 100),
+          }}
+          onSubmit={handlePaymentFormSubmit}
+          setFormState={setCreatePaymentForm}
+        >
+          <AccountForm />
+        </FormComponent>
       </Dialog>
       <Menu
         anchorEl={anchorEl}
@@ -190,19 +265,48 @@ const Loans = () => {
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
       >
-        <MenuItem onClick={() => handleEdit(selectedRow)}>
+        <MenuItem
+          onClick={() => {
+            setLoansDialogState(true);
+            handleMenuClose();
+          }}
+        >
+          <ViewColumn color="primary" style={{ marginRight: 8 }} />
+          {t("view_payments")}
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            handleEdit(selectedRow);
+            handleMenuClose();
+          }}
+        >
           <EditIcon color="primary" style={{ marginRight: 8 }} />
           {t("edit")}
         </MenuItem>
-        <MenuItem onClick={() => setConfirmDialogOpen(true)}>
+        <MenuItem
+          onClick={() => {
+            setConfirmDialogOpen(true);
+            handleMenuClose();
+          }}
+        >
           <DeleteIcon color="secondary" style={{ marginRight: 8 }} />
           {t("delete")}
         </MenuItem>
       </Menu>
-      <ConfirmDeleteDialog
+      <ConfirmDialog
+        confirmType="secondary"
+        confirmTitle={t("confirm_delete")}
+        confirmDescription={
+          t("confirm_delete_message") + " : " + selectedRow?.loan_id
+        }
         open={confirmDialogOpen}
-        handleClose={() => setConfirmDialogOpen(false)}
-        handleConfirm={() => handleDelete(selectedRow.user_id)}
+        handleClose={() => {
+          setConfirmDialogOpen(false);
+        }}
+        handleConfirm={(confirm) =>
+          confirm && handleDelete(selectedRow.loan_id)
+        }
       />
     </Container>
   );

@@ -6,6 +6,24 @@ export function removeEmptyValues(data) {
   });
 }
 
+export function convertDate(dateString) {
+  // Create a new Date object from the dateString
+  const date = new Date(dateString);
+
+  // Extract day, month, and year
+  const day = date.getDate();
+  const month = date.getMonth() + 1; // Months are zero-indexed, so add 1
+  const year = date.getFullYear(); // Get last two digits of the year
+
+  // Pad day and month with leading zeros if needed
+  const formattedDay = day.toString().padStart(2, "0");
+  const formattedMonth = month.toString().padStart(2, "0");
+  const formattedYear = year.toString().padStart(2, "0");
+
+  // Return formatted date in DD/MM/YY format
+  return `${formattedDay}/${formattedMonth}/${formattedYear}`;
+}
+
 export const formatDateFromData = (data, dataModel) => {
   return Object.keys(data).reduce((acc, key) => {
     if (dataModel[key]?.type === "date") {

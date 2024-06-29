@@ -1,3 +1,6 @@
+import React from "react";
+import { convertDate } from "../utils/core.services";
+
 export const customersColumn = [
   {
     field: "user_id",
@@ -65,7 +68,6 @@ export const loansColumn = [
     minWidth: 100,
     flex: 1,
     align: "left",
-    pinnable: true,
   },
   {
     field: "user_id",
@@ -73,7 +75,6 @@ export const loansColumn = [
     minWidth: 150,
     flex: 1,
     align: "left",
-    pinnable: true,
   },
   {
     field: "user_name",
@@ -81,7 +82,6 @@ export const loansColumn = [
     minWidth: 150,
     flex: 1,
     align: "left",
-    pinnable: true,
   },
   {
     field: "amount",
@@ -89,10 +89,12 @@ export const loansColumn = [
     minWidth: 150,
     flex: 1,
     align: "left",
+    renderCell: (params) => <strong>{params.value.toUpperCase()} Rs</strong>,
   },
+
   {
-    field: "interest_rate",
-    headerName: "interest_rate",
+    field: "loan_type_name",
+    headerName: "loan_type_name",
     minWidth: 150,
     flex: 1,
     align: "left",
@@ -100,16 +102,25 @@ export const loansColumn = [
   {
     field: "loan_date",
     headerName: "loan_date",
-    minWidth: 100,
+    minWidth: 150,
     flex: 1,
     align: "left",
+    renderCell: (params) => {
+      return convertDate(params.value);
+    },
   },
   {
     field: "next_due_date",
     headerName: "next_due_date",
-    minWidth: 100,
+    minWidth: 150,
     flex: 1,
     align: "left",
+    renderCell: (params) => {
+      return convertDate(params.value);
+    },
+  },
+  {
+    field: "payment",
   },
   {
     field: "balance",
@@ -117,8 +128,29 @@ export const loansColumn = [
     minWidth: 150,
     flex: 1,
     align: "left",
+    renderCell: (params) => (
+      <strong style={{ color: "red" }}>{params.value.toUpperCase()} Rs</strong>
+    ),
   },
 
+  {
+    field: "end_date",
+    headerName: "end_date",
+    minWidth: 150,
+    flex: 1,
+    align: "left",
+    renderCell: (params) => {
+      return convertDate(params.value);
+    },
+  },
+
+  {
+    field: "interest_rate",
+    headerName: "interest_rate",
+    minWidth: 150,
+    flex: 1,
+    align: "left",
+  },
   {
     field: "due_tenure",
     headerName: "due_tenure",
@@ -147,5 +179,12 @@ export const loansColumn = [
     minWidth: 150,
     flex: 1,
     align: "left",
+    renderCell: (params) => (
+      <strong
+        style={{ color: `${params.value === "active" ? "green" : "red"}` }}
+      >
+        {params.value.toUpperCase()}
+      </strong>
+    ),
   },
 ];

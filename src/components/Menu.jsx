@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   List,
   ListItemText,
@@ -25,6 +25,9 @@ const Menu = () => {
   const handleListItemClick = (index) => {
     setSelectedMenu(index);
   };
+  useEffect(() => {
+    setSelectedMenu(location.pathname);
+  }, [location.pathname]);
 
   return (
     <Drawer

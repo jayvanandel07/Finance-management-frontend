@@ -10,6 +10,8 @@
 //   additionalData: "object",
 // };
 
+import { convertDate } from "../utils/core.services";
+
 export const customersModel = [
   { name: "user_id", required: true, validation: "number" },
   { name: "name", required: true },
@@ -81,4 +83,41 @@ export const loansModel = [
 
   { name: "loan_date", type: "date", required: true, size: "md" },
   { name: "start_date", type: "date", size: "md" },
+];
+
+export const paymentModel = [
+  { name: "loan_id", required: true, disabled: true },
+  { name: "user_name", required: true, disabled: true },
+  {
+    name: "account_no",
+    label: "name",
+    required: true,
+    type: "dropdown",
+    apiUrl: "/accounts",
+    size: "md",
+    setFields: [
+      {
+        name: "account_no",
+        value: "account_no",
+      },
+    ],
+  },
+
+  {
+    name: "account_no",
+    required: true,
+    validation: "number",
+    disabled: true,
+    size: "md",
+  },
+  {
+    name: "amount",
+    required: true,
+    validation: "number",
+  },
+  {
+    name: "payment_date",
+    type: "date",
+    required: true,
+  },
 ];
