@@ -76,7 +76,9 @@ const FormComponent = ({
         console.error("Error submitting form:", error);
         dispatch(
           showSnackbar({
-            message: t("Something went wrong!"),
+            message: `${t("Something went wrong!")} : ${
+              error.response.data.error
+            }`,
             severity: "error",
           })
         );
@@ -299,7 +301,7 @@ const FormComponent = ({
 };
 
 FormComponent.propTypes = {
-  dataModel: PropTypes.func.isRequired,
+  dataModel: PropTypes.array.isRequired,
   formTitle: PropTypes.string.isRequired,
   update: PropTypes.bool,
   updateData: PropTypes.object,

@@ -79,6 +79,6 @@ export const loansModel = [
     required: true,
   },
 
-  { name: "loan_date", type: "date", required: true },
-  { name: "start_date", type: "date", required: true },
+  { name: "loan_date", type: "date", required: true, size: "md" },
+  { name: "start_date", type: "date", size: "md" },
 ];

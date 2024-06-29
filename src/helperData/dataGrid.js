@@ -118,6 +118,29 @@ export const loansColumn = [
     flex: 1,
     align: "left",
   },
+
+  {
+    field: "due_tenure",
+    headerName: "due_tenure",
+    minWidth: 150,
+    flex: 1,
+    align: "left",
+  },
+  {
+    field: "due_frequency",
+    headerName: "due_frequency",
+    minWidth: 150,
+    flex: 1,
+    align: "left",
+  },
+  {
+    field: "due_time_unit",
+    headerName: "due_time_unit",
+    minWidth: 150,
+    flex: 1,
+    align: "left",
+  },
+
   {
     field: "status",
     headerName: "status",
