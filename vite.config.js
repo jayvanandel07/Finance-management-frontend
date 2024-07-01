@@ -1,10 +1,13 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import vitePluginImp from "vite-plugin-imp";
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(), // Plugin for React support
+  ],
 
-  mode: process.env.NODE_ENV, // This automatically sets the mode based on Node environment
+  // Load environment variables from these files based on NODE_ENV
   envFiles: [
     ".env",
     `.env.${process.env.NODE_ENV}`,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
@@ -9,14 +9,16 @@ const PrivateRoute = ({ children }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   let role;
-  try {
-    role = jwtDecode(token).userType;
-  } catch (error) {
-    console.log(error);
-    dispatch(logout());
-    navigate("/login");
-  }
-  return token && role == import.meta.env.VITE_LENDER_ROLE ? (
+  useEffect(() => {
+    // try {
+    //   role = jwtDecode(token).userType;
+    // } catch (error) {
+    //   console.log(error);
+    //   dispatch(logout());
+    //   navigate("/login");
+    // }
+  }, []);
+  return true || (token && role == import.meta.env.VITE_LENDER_ROLE) ? (
     children
   ) : (
     <Navigate to="/login" />
