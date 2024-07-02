@@ -1,7 +1,7 @@
 import React from "react";
 import { Flex, Menu, Typography, theme } from "antd";
 import {
-  UserOutlined,
+  TranslationOutlined,
   DashboardOutlined,
   UsergroupAddOutlined,
   MoneyCollectOutlined,
@@ -19,23 +19,34 @@ const Sidebar = ({ collapsed }) => {
   const bottomMenuItems = [
     {
       key: "translation",
-      icon: <UserOutlined />,
+      title: t("translation"),
+      icon: <TranslationOutlined />,
       label: <Typography.Text>{t("translation")}</Typography.Text>,
       children: [
         {
           key: "t1",
           label: (
-            <div onClick={() => i18n.changeLanguage("en")}>
-              <Typography.Text>{t("english")}</Typography.Text>
-            </div>
+            <Typography.Text
+              style={{
+                display: "flex",
+                height: "100%",
+                alignItems: "center",
+              }}
+              onClick={() => i18n.changeLanguage("en")}
+            >
+              {t("english")}
+            </Typography.Text>
           ),
         },
         {
           key: "t2",
           label: (
-            <div onClick={() => i18n.changeLanguage("ta")}>
-              <Typography.Text>{t("tamil")}</Typography.Text>
-            </div>
+            <Typography.Text
+              style={{ display: "flex", height: "100%", alignItems: "center" }}
+              onClick={() => i18n.changeLanguage("ta")}
+            >
+              {t("tamil")}
+            </Typography.Text>
           ),
         },
       ],
@@ -43,6 +54,7 @@ const Sidebar = ({ collapsed }) => {
     {
       key: "logout",
       icon: <LogoutOutlined style={{ color: `${colorError}` }} />,
+      title: t("logout"),
       label: <Typography.Text> {t("logout")}</Typography.Text>,
     },
   ];
@@ -50,6 +62,7 @@ const Sidebar = ({ collapsed }) => {
     {
       key: "dashboard",
       icon: <DashboardOutlined />,
+      title: t("dashboard"),
       label: (
         <Link to="/app/dashboard">
           <Typography.Text>{t("dashboard")}</Typography.Text>
@@ -59,6 +72,7 @@ const Sidebar = ({ collapsed }) => {
     {
       key: "customers",
       icon: <UsergroupAddOutlined />,
+      title: t("customers"),
       label: (
         <Link to="/app/customers">
           <Typography.Text>{t("customers")}</Typography.Text>
@@ -68,6 +82,7 @@ const Sidebar = ({ collapsed }) => {
     {
       key: "loans",
       icon: <MoneyCollectOutlined />,
+      title: t("loans"),
       label: (
         <Link to="/app/loans">
           <Typography.Text>{t("loans")}</Typography.Text>
@@ -78,27 +93,30 @@ const Sidebar = ({ collapsed }) => {
 
   return (
     <>
-      <Typography.Title
-        style={{
-          textAlign: "center",
-          marginBlock: ".77em",
-        }}
-        level={4}
-      >
-        {collapsed ? "FM" : "Finance Manager"}
-      </Typography.Title>
+      <Link to="/app/dashboard">
+        <Typography.Title
+          style={{
+            textAlign: "center",
+            margin: 0,
+            paddingBlock: ".77em",
+            borderBottom: `${lineWidth}px ${lineType} ${colorSplit}`,
+          }}
+          level={4}
+        >
+          {collapsed ? "FM" : "Finance Manager"}
+        </Typography.Title>
+      </Link>
 
       <Menu
         style={{
           border: "none",
-          borderTop: `${lineWidth}px ${lineType} ${colorSplit}`,
         }}
         mode="vertical"
         defaultSelectedKeys={["1"]}
         items={menuItems}
       />
       <Flex
-        style={{ position: "absolute", bottom: 0, width: "100%" }}
+        style={{ position: "sticky", bottom: 0, width: "100%" }}
         gap={"middle"}
         vertical
       >

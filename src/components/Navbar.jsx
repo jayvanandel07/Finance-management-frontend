@@ -15,6 +15,8 @@ const Navbar = ({ collapsed, toggleCollapsed }) => {
   return (
     <Header
       style={{
+        position: "sticky",
+        top: 0,
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -27,9 +29,7 @@ const Navbar = ({ collapsed, toggleCollapsed }) => {
         onClick={toggleCollapsed}
       />
       <Link to="/app/profile">
-        <Avatar size="default" icon={<UserOutlined />}>
-          hello
-        </Avatar>
+        <Avatar size="default" icon={<UserOutlined />}></Avatar>
       </Link>
     </Header>
   );
