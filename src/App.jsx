@@ -34,7 +34,7 @@ const customTheme = {
     colorSplit: "#DADADA",
 
     // Font
-    fontSize: 14,
+    fontSize: 16,
 
     // Spacing
     sizeStep: 4,
@@ -62,6 +62,10 @@ const customTheme = {
     // Navigation
     Menu: {
       itemBg: "#F5F5F5",
+
+      //Size
+      iconSize: 16,
+      itemHeight: 50,
     },
   },
 };
